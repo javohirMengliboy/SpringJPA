@@ -1,0 +1,62 @@
+### CREATE COURSE
+POST localhost:8080/course/create
+Content-Type: application/json
+
+{
+  "name": "Kotlin",
+  "price": 1500000.0,
+  "duration": 7
+}
+
+### CREATE COURSE ALL
+POST localhost:8080/course/create/all
+Content-Type: application/json
+
+[
+  {
+    "name": "PHP",
+    "price": 800000.0,
+    "duration": 9
+  },
+  {
+    "name": "Java",
+    "price": 1000000.0,
+    "duration": 7
+  }
+]
+
+### GET ALL COURSE
+GET localhost:8080/course/all
+
+### GET BY id
+GET localhost:8080/course/2
+
+### GET BY name
+GET localhost:8080/course/name?name=Java
+
+### GET BY price
+GET localhost:8080/course/price?price=1500000
+
+### GET BY duration
+GET localhost:8080/course/duration?duration=5
+
+### GET BY created_date
+GET localhost:8080/course/created_date?created_date=2023-07-05
+
+### GET BY beetwen date
+GET localhost:8080/course/date-range?startDate=2023-07-01&endDate=2023-07-31
+
+### DELETE ALL
+DELETE localhost:8080/student/delete/all
+
+### DELETE BY id
+DELETE localhost:8080/course/3
+
+### UPDATE by id
+PUT localhost:8080/course/1
+Content-Type: application/json
+
+{
+  "name": "PHP",
+  "price": 888000.0
+}

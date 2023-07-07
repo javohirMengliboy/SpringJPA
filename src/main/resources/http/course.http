@@ -15,13 +15,88 @@ Content-Type: application/json
 [
   {
     "name": "PHP",
-    "price": 800000.0,
+    "price": 80.0,
     "duration": 9
   },
   {
     "name": "Java",
-    "price": 1000000.0,
+    "price": 100.0,
     "duration": 7
+  },
+  {
+    "name": "C",
+    "price": 60.0,
+    "duration": 7
+  },
+  {
+    "name": "C++",
+    "price": 70.0,
+    "duration": 7
+  },
+  {
+    "name": ".Net",
+    "price": 100.0,
+    "duration": 7
+  },
+  {
+    "name": "Python",
+    "price": 90.0,
+    "duration": 8
+  },
+  {
+    "name": "JavaScript",
+    "price": 110.0,
+    "duration": 8
+  },
+  {
+    "name": "Swift",
+    "price": 120.0,
+    "duration": 7
+  },
+  {
+    "name": "Go",
+    "price": 80.0,
+    "duration": 6
+  },
+  {
+    "name": "QA",
+    "price": 50.0,
+    "duration": 4
+  },
+  {
+    "name": "Ruby",
+    "price": 85.0,
+    "duration": 6
+  },
+  {
+    "name": "Flutter",
+    "price": 90.0,
+    "duration": 9
+  },
+  {
+    "name": "Kotlin",
+    "price": 110.0,
+    "duration": 7
+  },
+  {
+    "name": "PostgreSQL",
+    "price": 750.0,
+    "duration": 5
+  },
+  {
+    "name": "ReactJS",
+    "price": 80.0,
+    "duration": 6
+  },
+  {
+    "name": "Angular",
+    "price": 80.0,
+    "duration": 6
+  },
+  {
+    "name": "Oracle",
+    "price": 100.0,
+    "duration": 6
   }
 ]
 
@@ -46,6 +121,22 @@ GET localhost:8080/course/created_date?created_date=2023-07-05
 ### GET BY beetwen date
 GET localhost:8080/course/date-range?startDate=2023-07-01&endDate=2023-07-31
 
+### GET student pagenation
+GET localhost:8080/course/pagination?page=0&size=3
+
+### GET student pagenation by created_date
+GET localhost:8080/course/pagination/sortByCreated_date?page=0&size=3
+
+### GET student pagenation by price
+GET localhost:8080/course/pagination/by_price?page=0&size=3&price=80
+
+### GET student pagenation by price between
+GET localhost:8080/course/pagination/by_price_between?page=0&size=5&from=90&to=100
+
+
+
+
+
 ### DELETE ALL
 DELETE localhost:8080/student/delete/all
 
@@ -57,6 +148,5 @@ PUT localhost:8080/course/1
 Content-Type: application/json
 
 {
-  "name": "PHP",
-  "price": 888000.0
+  "name": "PHP"
 }

@@ -9,17 +9,17 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class CourseDto {
+public class CourseDTO {
     private Integer id;
     private String name;
     private Double price;
     private Integer duration;
     private LocalDateTime createdDate;
 
-    public CourseDto() {
+    public CourseDTO() {
     }
 
-    public CourseDto(Integer id, String name, Double price, Integer duration, LocalDateTime createdDate) {
+    public CourseDTO(Integer id, String name, Double price, Integer duration, LocalDateTime createdDate) {
         this.id = id;
         this.name = name;
         this.price = price;

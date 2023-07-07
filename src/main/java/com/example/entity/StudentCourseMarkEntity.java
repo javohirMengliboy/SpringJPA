@@ -5,25 +5,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "course")
-public class CourseEntity {
+@Table(name = "student_course_mark")
+public class StudentCourseMarkEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name", unique = true)
-    private String name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private StudentEntity student;
 
-    @Column(name = "price")
-    private Double price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
+    private CourseEntity course;
 
-    @Column(name = "duration")
-    private Integer duration;
+    @Column(name = "mark")
+    private Double mark;
 
     @Column(name = "created_date")
     private LocalDateTime createdDate = LocalDateTime.now();

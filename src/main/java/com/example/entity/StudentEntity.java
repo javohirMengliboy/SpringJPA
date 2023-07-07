@@ -36,7 +36,7 @@ public class StudentEntity {
     private String phone;
 
     @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 
 
 }

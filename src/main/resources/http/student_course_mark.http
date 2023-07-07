@@ -1,0 +1,75 @@
+### 1. CREATE StudentCourseMark
+POST localhost:8080/student_course_mark/create
+Content-Type: application/json
+
+{
+  "student": 3,
+  "course": 5,
+  "mark": 5
+}
+
+### 1. CREATE StudentCourseMark ALL
+POST localhost:8080/student_course_mark/create/all
+Content-Type: application/json
+
+[
+  {
+    "student": 3,
+    "course": 5,
+    "mark": 4
+  },
+  {
+    "student": 7,
+    "course": 2,
+    "mark": 3
+  },
+  {
+    "student": 10,
+    "course": 1,
+    "mark": 5
+  }
+]
+
+### 2. UPDATE by id
+PUT localhost:8080/student_course_mark/1
+Content-Type: application/json
+
+{
+  "mark": 5
+}
+
+### 3. GET StudentCourseMark BY id
+GET localhost:8080/student_course_mark/by_id/
+
+### 4. GET StudentCourseMark by id with detail
+GET localhost:8080/student_course_mark/by_id_with_detail/3
+
+### 5. DELETE BY id
+DELETE localhost:8080/student_course_mark/2
+
+### 6. GET ALL StudentCourseMark
+GET localhost:8080/student_course_mark/all
+
+### 7. GET StudentCourseMark get mark by given date
+GET localhost:8080/student_course_mark/get_mark_by_given_date?studentId=3&date=2023-07-07
+
+### 8. GET StudentCourseMark get mark by between date
+GET localhost:8080/student_course_mark/get_mark_by_between_date?studentId=3&from=2023-07-01&to=2023-07-07
+
+### 9. GET StudentCourseMark get all mark by student id
+GET localhost:8080/student_course_mark/get_all_mark_by_student_id?studentId=3
+
+### 10. GET StudentCourseMark get all mark by student id and by course id
+GET localhost:8080/student_course_mark/get_all_mark_by_student_id_and_by_course_id?studentId=3&courseId=5
+
+### 11. GET StudentCourseMark get mark and course by student id
+GET localhost:8080/student_course_mark/get_mark_and_course_by_student_id?studentId=3
+
+
+
+
+
+
+
+
+

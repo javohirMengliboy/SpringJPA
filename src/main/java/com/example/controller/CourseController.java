@@ -1,9 +1,7 @@
 package com.example.controller;
 
-import com.example.dto.CourseDto;
-import com.example.dto.StudentDto;
+import com.example.dto.CourseDTO;
 import com.example.entity.CourseEntity;
-import com.example.entity.StudentEntity;
 import com.example.exp.ItemNotFoundException;
 import com.example.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +20,13 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping(value = "/create")
-    public ResponseEntity<?> create(@RequestBody CourseDto course){
-        CourseDto studentDto = courseService.add(course);
+    public ResponseEntity<?> create(@RequestBody CourseDTO course){
+        CourseDTO studentDto = courseService.add(course);
         return new ResponseEntity<>(studentDto, HttpStatus.OK);
     }
 
     @PostMapping(value = "/create/all")
-    public ResponseEntity<?> create(@RequestBody List<CourseDto> list){
+    public ResponseEntity<?> create(@RequestBody List<CourseDTO> list){
         return ResponseEntity.ok(courseService.addAll(list));
     }
 
@@ -86,6 +84,36 @@ public class CourseController {
         return ResponseEntity.ok(studentList);
     }
 
+    @GetMapping("/pagination")
+    public ResponseEntity<List<CourseDTO>> getStudentPagination(@RequestParam int page,
+                                                                @RequestParam int size) {
+        List<CourseDTO> studentList = courseService.getCoursePagination(page, size);
+        return ResponseEntity.ok(studentList);
+    }
+    @GetMapping("/pagination/sortByCreated_date")
+    public ResponseEntity<List<CourseDTO>> getCoursePaginationSortByCreatedDate(@RequestParam int page,
+                                                                                @RequestParam int size) {
+        List<CourseDTO> studentList = courseService.getCoursePaginationSortByCreatedDate(page, size);
+        return ResponseEntity.ok(studentList);
+    }
+
+    @GetMapping("/pagination/by_price")
+    public ResponseEntity<List<CourseDTO>> getCoursePaginationByPrice(@RequestParam int page,
+                                                                      @RequestParam int size,
+                                                                      @RequestParam double price) {
+        List<CourseDTO> studentList = courseService.getCoursePaginationByPrice(page, size, price);
+        return ResponseEntity.ok(studentList);
+    }
+
+    @GetMapping("/pagination/by_price_between")
+    public ResponseEntity<List<CourseDTO>> getCoursePaginationByPriceBetween(@RequestParam int page,
+                                                                             @RequestParam int size,
+                                                                             @RequestParam double from,
+                                                                             @RequestParam double to) {
+        List<CourseDTO> studentList = courseService.getCoursePaginationByPriceBetween(page, size, from,to);
+        return ResponseEntity.ok(studentList);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Integer id){
         Boolean response = courseService.delete(id);
@@ -96,7 +124,7 @@ public class CourseController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> put(@RequestBody CourseDto courseDto,@PathVariable("id") Integer id){
+    public ResponseEntity<?> put(@RequestBody CourseDTO courseDto, @PathVariable("id") Integer id){
         Boolean response = courseService.update(id, courseDto);
         if (response){
             return ResponseEntity.ok(true);

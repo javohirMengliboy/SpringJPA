@@ -1,11 +1,14 @@
 package com.example.service;
 
-import com.example.dto.StudentDto;
+import com.example.dto.StudentDTO;
 import com.example.entity.StudentEntity;
+import com.example.enums.Gender;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,7 +22,7 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public StudentDto add(StudentDto dto){
+    public StudentDTO add(StudentDTO dto){
         check(dto);
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setName(dto.getName());
@@ -34,8 +37,8 @@ public class StudentService {
         return dto;
     }
 
-    public List<StudentDto> addAll(List<StudentDto> list){
-        for (StudentDto dto : list) {
+    public List<StudentDTO> addAll(List<StudentDTO> list){
+        for (StudentDTO dto : list) {
             StudentEntity studentEntity = new StudentEntity();
             studentEntity.setName(dto.getName());
             studentEntity.setSurname(dto.getSurname());
@@ -52,16 +55,16 @@ public class StudentService {
 
     /** Get Methods */
 
-    public List<StudentDto> getAll(){
+    public List<StudentDTO> getAll(){
         Iterable<StudentEntity> iterable = studentRepository.findAll();
-        List<StudentDto> dtoList = new ArrayList<>();
+        List<StudentDTO> dtoList = new ArrayList<>();
         iterable.forEach(studentEntity -> {
             dtoList.add(toDto(studentEntity));
         });
         return dtoList;
     }
 
-    public StudentDto getById(Integer id){
+    public StudentDTO getById(Integer id){
         Optional<StudentEntity> optional = studentRepository.findById(id);
         if (optional.isEmpty()){
             throw new ItemNotFoundException("Student not found");
@@ -80,28 +83,28 @@ public class StudentService {
         return toDto(entity);
     }
 
-    public List<StudentDto> getByName(String name){
+    public List<StudentDTO> getByName(String name){
         List<StudentEntity> entityList = studentRepository.getByName(name);
         if (entityList.isEmpty()){
             throw new ItemNotFoundException("Student not found");
         }
-        List<StudentDto> dtoList = new ArrayList<>();
+        List<StudentDTO> dtoList = new ArrayList<>();
         entityList.forEach((e) -> dtoList.add(toDto(e)));
         return dtoList;
     }
 
-    public List<StudentDto> getBySurname(String surname){
+    public List<StudentDTO> getBySurname(String surname){
         Iterable<StudentEntity> iterable = studentRepository.getBySurname(surname);
-        List<StudentDto> dtoList = new ArrayList<>();
+        List<StudentDTO> dtoList = new ArrayList<>();
         iterable.forEach((entity) -> dtoList.add(toDto(entity)));
         if (dtoList.isEmpty()){
             throw new ItemNotFoundException("Student not found");
         }
         return dtoList;
     }
-    public List<StudentDto> getByLevel(Integer level){
+    public List<StudentDTO> getByLevel(Integer level){
         Iterable<StudentEntity> iterable = studentRepository.getByLevel(level);
-        List<StudentDto> dtoList = new ArrayList<>();
+        List<StudentDTO> dtoList = new ArrayList<>();
         iterable.forEach((entity) -> dtoList.add(toDto(entity)));
         if (dtoList.isEmpty()){
             throw new ItemNotFoundException("Student not found");
@@ -109,9 +112,9 @@ public class StudentService {
         return dtoList;
     }
 
-    public List<StudentDto> getByGender(String gender) {
+    public List<StudentDTO> getByGender(String gender) {
         Iterable<StudentEntity> iterable = studentRepository.getByGender(gender);
-        List<StudentDto> dtoList = new ArrayList<>();
+        List<StudentDTO> dtoList = new ArrayList<>();
         iterable.forEach((entity) -> dtoList.add(toDto(entity)));
         if (dtoList.isEmpty()){
             throw new ItemNotFoundException("Student not found");
@@ -119,12 +122,12 @@ public class StudentService {
         return dtoList;
     }
 
-    public List<StudentDto> getByCreatedDate(LocalDate createdDate) {
+    public List<StudentDTO> getByCreatedDate(LocalDate createdDate) {
         List<StudentEntity> studentEntities = studentRepository.getStudentEntitiesByCreatedDateBetween(createdDate.atStartOfDay(),createdDate.plusDays(1).atStartOfDay());
         if (studentEntities.isEmpty()){
             throw new ItemNotFoundException("Student not found");
         }
-        List<StudentDto> dtoList = new ArrayList<>();
+        List<StudentDTO> dtoList = new ArrayList<>();
         for (StudentEntity entity : studentEntities) {
             dtoList.add(toDto(entity));
         }
@@ -149,7 +152,32 @@ public class StudentService {
         return true;
     }
 
-    public Boolean update(Integer id, StudentDto student) {
+    public List<StudentDTO> getStudentPagination(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        List<StudentDTO> dtoList = new ArrayList<>();
+        List<StudentEntity> entityList = studentRepository.findAllBy(pageable);
+        entityList.forEach(entity -> dtoList.add(toDto(entity)));
+        return dtoList;
+    }
+
+    public List<StudentDTO> getStudentPaginationByLevel(int page, int size, int level) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<StudentDTO> dtoList = new ArrayList<>();
+        List<StudentEntity> entityList = studentRepository.findAllByLevelOrderByIdAsc(pageable,level);
+        entityList.forEach(entity -> dtoList.add(toDto(entity)));
+        return dtoList;
+
+    }
+
+    public List<StudentDTO> getStudentPaginationByGender(int page, int size, String gender) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<StudentDTO> dtoList = new ArrayList<>();
+        List<StudentEntity> entityList = studentRepository.findAllByGenderOrderById(Gender.valueOf(gender),pageable);
+        entityList.forEach(entity -> dtoList.add(toDto(entity)));
+        return dtoList;
+    }
+
+    public Boolean update(Integer id, StudentDTO student) {
         check(student);
         Optional<StudentEntity> optional = studentRepository.findById(id);
         if (optional.isEmpty()){
@@ -164,8 +192,8 @@ public class StudentService {
 
 
 
-    private StudentDto toDto(StudentEntity studentEntity) {
-        StudentDto dto = new StudentDto();
+    private StudentDTO toDto(StudentEntity studentEntity) {
+        StudentDTO dto = new StudentDTO();
         dto.setId(studentEntity.getId());
         dto.setName(studentEntity.getName());
         dto.setSurname(studentEntity.getSurname());
@@ -177,7 +205,7 @@ public class StudentService {
         return dto;
     }
 
-    private void check(StudentDto dto) {
+    private void check(StudentDTO dto) {
         if (dto.getName() == null || dto.getName().isBlank()){
             throw  new AppBadRequestException("Where Name?");
         }
@@ -185,7 +213,6 @@ public class StudentService {
             throw  new AppBadRequestException("Where Surname?");
         }
     }
-
 
 
 }

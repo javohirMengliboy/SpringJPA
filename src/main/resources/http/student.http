@@ -18,20 +18,76 @@ Content-Type: application/json
 
 [
   {
-    "name": "Toshmat",
-    "surname": "Toshmatov",
+    "name": "Vali",
+    "surname": "Umarov",
     "level": 1,
-    "age": 20,
+    "age": 23,
     "gender": "MALE",
-    "phone": "333"
+    "phone": "111111"
   },
   {
-    "name": "Vali",
-    "surname": "Valiyev",
+    "name": "Lola",
+    "surname": "Aliyeva",
+    "level": 4,
+    "age": 24,
+    "gender": "FEMALE",
+    "phone": "222222"
+  },
+  {
+    "name": "Majid",
+    "surname": "Sobirov",
     "level": 3,
-    "age": 20,
+    "age": 22,
     "gender": "MALE",
-    "phone": "222"
+    "phone": "333333"
+  },
+  {
+    "name": "Hamdan",
+    "surname": "Azizov",
+    "level": 2,
+    "age": 25,
+    "gender": "MALE",
+    "phone": "444444"
+  },
+  {
+    "name": "Samandar",
+    "surname": "Yusupov",
+    "level": 4,
+    "age": 23,
+    "gender": "MALE",
+    "phone": "555555"
+  },
+  {
+    "name": "Yusuf",
+    "surname": "Azimov",
+    "level": 2,
+    "age": 27,
+    "gender": "MALE",
+    "phone": "666666"
+  },
+  {
+    "name": "Habiba",
+    "surname": "Valiyeva",
+    "level": 4,
+    "age": 30,
+    "gender": "FEMALE",
+    "phone": "777777"
+  },
+  {
+    "name": "Nigora",
+    "surname": "Qamarova",
+    "level": 2,
+    "age": 22,
+    "gender": "FEMALE",
+    "phone": "888888"
+  },
+  {
+    "name": "Qamar",
+    "surname": "Ibrohimov",
+    "level": 4,
+    "age": 26,
+    "gender": "MALE",
+    "phone": "999999"
   }
 ]
 
@@ -65,6 +121,18 @@ GET localhost:8080/student/created_date?created_date=2023-07-05
 
 ### GET BY beetwen date
 GET localhost:8080/student/date-range?startDate=2023-07-01&endDate=2023-07-31
+
+### GET student pagenation
+GET localhost:8080/student/pagination?page=0&size=3
+
+### GET student pagenation by level
+GET localhost:8080/student/pagination/by-level?page=0&size=3&level=2
+
+### GET student pagenation by gender
+GET localhost:8080/student/pagination/by-gender?page=0&size=3&gender=FEMALE
+
+
+
 
 ### DELETE ALL
 DELETE localhost:8080/student/delete/all

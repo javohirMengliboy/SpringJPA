@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.StudentDto;
+import com.example.dto.StudentDTO;
 import com.example.entity.StudentEntity;
 import com.example.exp.ItemNotFoundException;
 import com.example.service.StudentService;
@@ -21,13 +21,13 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping(value = "/create")
-    public ResponseEntity<?> create(@RequestBody StudentDto student){
-        StudentDto studentDto = studentService.add(student);
+    public ResponseEntity<?> create(@RequestBody StudentDTO student){
+        StudentDTO studentDto = studentService.add(student);
         return new ResponseEntity<>(studentDto, HttpStatus.OK);
     }
 
     @PostMapping(value = "/create/all")
-    public ResponseEntity<?> create(@RequestBody List<StudentDto> list){
+    public ResponseEntity<?> create(@RequestBody List<StudentDTO> list){
         return ResponseEntity.ok(studentService.addAll(list));
     }
 
@@ -98,6 +98,29 @@ public class StudentController {
         return ResponseEntity.ok(studentList);
     }
 
+    @GetMapping("/pagination")
+    public ResponseEntity<List<StudentDTO>> getStudentPagination(@RequestParam int page,
+                                                                 @RequestParam int size) {
+        List<StudentDTO> studentList = studentService.getStudentPagination(page, size);
+        return ResponseEntity.ok(studentList);
+    }
+    @GetMapping("/pagination/by-level")
+    public ResponseEntity<List<StudentDTO>> getStudentPaginationByLevel(@RequestParam int page,
+                                                                        @RequestParam int size,
+                                                                        @RequestParam int level) {
+        List<StudentDTO> studentList = studentService.getStudentPaginationByLevel(page, size, level);
+        return ResponseEntity.ok(studentList);
+    }
+
+    @GetMapping("/pagination/by-gender")
+    public ResponseEntity<List<StudentDTO>> getStudentPaginationByGender(@RequestParam int page,
+                                                                         @RequestParam int size,
+                                                                         @RequestParam String gender) {
+        List<StudentDTO> studentList = studentService.getStudentPaginationByGender(page, size, gender);
+        return ResponseEntity.ok(studentList);
+    }
+
+
     @DeleteMapping(value = "/delete/all")
     public ResponseEntity<?> deleteAll(){
         studentService.deleteAll();
@@ -114,7 +137,7 @@ public class StudentController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<?> put(@RequestBody StudentDto student,@PathVariable("id") Integer id){
+    public ResponseEntity<?> put(@RequestBody StudentDTO student, @PathVariable("id") Integer id){
         Boolean response = studentService.update(id, student);
         if (response){
             return ResponseEntity.ok(true);

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class StudentDto {
+public class StudentDTO {
     private Integer id;
     private String name;
     private String surname;
@@ -19,10 +19,10 @@ public class StudentDto {
     private String phone;
     private LocalDateTime createdDate;
 
-    public StudentDto() {
+    public StudentDTO() {
     }
 
-    public StudentDto(Integer id, String name, String surname, Integer level, Integer age, Gender gender, String phone, LocalDateTime createdDate) {
+    public StudentDTO(Integer id, String name, String surname, Integer level, Integer age, Gender gender, String phone, LocalDateTime createdDate) {
         this.id = id;
         this.name = name;
         this.surname = surname;

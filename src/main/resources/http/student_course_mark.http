@@ -38,11 +38,21 @@ Content-Type: application/json
   "mark": 5
 }
 
+### 2. UPDATE2 by id
+PUT localhost:8080/student_course_mark/update?mark=4&id=5
+
 ### 3. GET StudentCourseMark BY id
 GET localhost:8080/student_course_mark/by_id/
 
 ### 4. GET StudentCourseMark by id with detail
 GET localhost:8080/student_course_mark/by_id_with_detail/3
+
+### 4. GET StudentCourseMark by student id with detail
+GET localhost:8080/student_course_mark/by_student_id_with_detail/3
+
+### 4. GET StudentCourseMark by course id with detail
+GET localhost:8080/student_course_mark/by_course_id_with_detail/5
+
 
 ### 5. DELETE BY id
 DELETE localhost:8080/student_course_mark/2
@@ -62,11 +72,47 @@ GET localhost:8080/student_course_mark/get_all_mark_by_student_id?studentId=3
 ### 10. GET StudentCourseMark get all mark by student id and by course id
 GET localhost:8080/student_course_mark/get_all_mark_by_student_id_and_by_course_id?studentId=3&courseId=5
 
-### 11. GET StudentCourseMark get mark and course by student id
-GET localhost:8080/student_course_mark/get_mark_and_course_by_student_id?studentId=3
+### 11. GET StudentCourseMark get last mark and course by student id
+GET localhost:8080/student_course_mark/get_last_mark_and_course_by_student_id?studentId=3
 
+### 12. GET StudentCourseMark get top3 mark and course by student id
+GET localhost:8080/student_course_mark/get_top3_mark_and_course_by_student_id?studentId=3
 
+### 13. GET StudentCourseMark get first mark and course by student id
+GET localhost:8080/student_course_mark/get_first_mark_and_course_by_student_id?studentId=3
 
+### 14. GET StudentCourseMark get first mark and course by student id and given cource
+GET localhost:8080/student_course_mark/get_first_mark_by_student_id_and_given_course?studentId=3&courseId=5
+
+### 15. GET StudentCourseMark get top1 mark and course by student id and given cource
+GET localhost:8080/student_course_mark/get_top1_mark_by_student_id_and_given_course?studentId=3&courseId=5
+
+### 16. GET StudentCourseMark get avg mark by student id
+GET localhost:8080/student_course_mark/get_avg_mark_by_student_id?studentId=3
+
+### 17. GET StudentCourseMark get avg mark and course by student id and given cource
+GET localhost:8080/student_course_mark/get_avg_mark_by_student_id_and_given_course?studentId=3&courseId=5
+
+### 18. GET StudentCourseMark get count mark by given mark older
+GET localhost:8080/student_course_mark/get_count_mark_by_given_mark_older?studentId=3&mark=4
+
+### 19. GET StudentCourseMark get top mark by given course
+GET localhost:8080/student_course_mark/get_top_mark_by_given_course?courseId=5
+
+### 20. GET StudentCourseMark get avg mark by given mark
+GET localhost:8080/student_course_mark/get_avg_mark_by_given_course?courseId=2
+
+### 21. GET StudentCourseMark get count mark by given mark
+GET localhost:8080/student_course_mark/get_count_mark_by_given_course?courseId=100
+
+### 22. GET StudentCourseMark pagination
+GET localhost:8080/student_course_mark/get_pagination?page=1&size=2
+
+### 23. GET StudentCourseMark pagination by given student Id
+GET localhost:8080/student_course_mark/get_pagination_by_given_student_id?studentId=3&page=0&size=2
+
+### 24. GET StudentCourseMark pagination by given course Id
+GET localhost:8080/student_course_mark/get_pagination_by_given_course_id?courseId=5&page=0&size=2
 
 
 

@@ -1,16 +1,17 @@
 package com.example.service;
 
 import com.example.dto.StudentCourseMarkDTO;
+import com.example.dto.StudentDTO;
 import com.example.entity.CourseEntity;
 import com.example.entity.StudentCourseMarkEntity;
 import com.example.entity.StudentEntity;
 import com.example.exp.ItemNotFoundException;
-import com.example.mapper.CourseMapper;
-import com.example.mapper.LastMarkAndCourseMapper;
-import com.example.mapper.StudentCourseMarkMapper;
-import com.example.mapper.StudentMapper;
+import com.example.mapper.*;
 import com.example.repository.StudentCourseMarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -72,6 +73,13 @@ public class StudentCourseMarkService {
         });
         return dtoList;
     }
+    public List<SCMMapper> getAll2() {
+        List<SCMMapper> mappers = studentCourseMarkRepository.getAll();
+        if (mappers.isEmpty()){
+            throw new ItemNotFoundException("StudentCourseMark not found");
+        }
+        return mappers;
+    }
 
     public StudentCourseMarkDTO getById(Integer id) {
         Optional<StudentCourseMarkEntity> optional = studentCourseMarkRepository.findById(id);
@@ -120,6 +128,11 @@ public class StudentCourseMarkService {
         return true;
     }
 
+    public Boolean delete2(Integer id) {
+        int effectiveRows = studentCourseMarkRepository.deleteQuery(id);
+        return effectiveRows != 0;
+    }
+
     public Boolean update(Integer id, StudentCourseMarkDTO dto) {
         Optional<StudentCourseMarkEntity> optional = studentCourseMarkRepository.findById(id);
         if (optional.isEmpty()) {
@@ -129,6 +142,11 @@ public class StudentCourseMarkService {
         entity.setMark(dto.getMark());
         studentCourseMarkRepository.save(entity);
         return true;
+    }
+
+    public Boolean update2(Double mark, Integer id) {
+        int effectiveRows = studentCourseMarkRepository.updateMarkById(mark,id);
+        return effectiveRows != 0;
     }
 
 
@@ -147,7 +165,7 @@ public class StudentCourseMarkService {
         LocalDateTime to = LocalDateTime.of(date, LocalTime.MAX);
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setId(studentId);
-        List<StudentCourseMarkEntity> studentCourseMarkEntityList =  studentCourseMarkRepository.findByCreatedDateBetweenAndStudent(from, to, studentEntity);
+        List<StudentCourseMarkEntity> studentCourseMarkEntityList =  studentCourseMarkRepository.findByCreatedDateBetweenAndStudent2(from, to, studentEntity);
         List<Double> markList = new LinkedList<>();
         studentCourseMarkEntityList.forEach(entity -> markList.add(entity.getMark()));
         return markList;
@@ -158,7 +176,7 @@ public class StudentCourseMarkService {
         LocalDateTime toDate = LocalDateTime.of(to, LocalTime.MAX);
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setId(studentId);
-        List<StudentCourseMarkEntity> studentCourseMarkEntityList =  studentCourseMarkRepository.findByCreatedDateBetweenAndStudent(fromDate, toDate, studentEntity);
+        List<StudentCourseMarkEntity> studentCourseMarkEntityList =  studentCourseMarkRepository.findByCreatedDateBetweenAndStudent2(fromDate, toDate, studentEntity);
         List<Double> markList = new LinkedList<>();
         studentCourseMarkEntityList.forEach(entity -> markList.add(entity.getMark()));
         return markList;
@@ -171,6 +189,10 @@ public class StudentCourseMarkService {
         List<Double> markList = new ArrayList<>();
         entityList.forEach(entity -> markList.add(entity.getMark()));
         return markList;
+    }
+
+    public List<LastMarkAndCourseMapper> getAllMarkByStudentId2(Integer studentId) {
+        return studentCourseMarkRepository.findMarkByStudentOrderByCreatedDateDesc2(studentId);
     }
 
     public List<Double> getAllMarkByStudentIdAndByCourseId(Integer studentId, Integer courseId) {
@@ -186,19 +208,155 @@ public class StudentCourseMarkService {
         return markList;
     }
 
-    public List<LastMarkAndCourseMapper> getMarkAndCourseByStudentId(Integer studentId) {
+    public List<LastMarkAndCourseMapper> getAllMarkByStudentIdAndByCourseId2(Integer studentId, Integer courseId) {
+        return studentCourseMarkRepository.findMarkByStudentAndCourseOrderByCreatedDateDesc2(studentId,courseId);
+    }
+
+    public List<LastMarkAndCourseMapper> getLastMarkAndCourseByStudentId(Integer studentId) {
+        return studentCourseMarkRepository.findTop1MarkAndCourseByStudentOrderByCreatedDateDesc2(studentId);
+//        StudentEntity studentEntity = new StudentEntity();
+//        studentEntity.setId(studentId);
+//
+//        List<StudentCourseMarkEntity> entityList = studentCourseMarkRepository.findTop1MarkAndCourseByStudentOrderByCreatedDateDesc(studentEntity);
+//        List<LastMarkAndCourseMapper> markList = new ArrayList<>();
+//        entityList.forEach(entity -> {
+//            LastMarkAndCourseMapper lastMarkAndCourseMapper = new LastMarkAndCourseMapper();
+//            lastMarkAndCourseMapper.setMark(entity.getMark());
+//            lastMarkAndCourseMapper.setCourseName(entity.getCourse().getName());
+//            markList.add(lastMarkAndCourseMapper);
+//        });
+//        return markList;
+    }
+
+
+
+    public LastMarkAndCourseMapper getFirstMarkAndCourseByStudentId(Integer studentId) {
+//        StudentEntity studentEntity = new StudentEntity();
+//        studentEntity.setId(studentId);
+//
+//        List<StudentCourseMarkEntity> entityList = studentCourseMarkRepository.findTop1MarkAndCourseByStudentOrderByCreatedDateAsc(studentEntity);
+//        List<LastMarkAndCourseMapper> markList = new ArrayList<>();
+//        entityList.forEach(entity -> {
+//            LastMarkAndCourseMapper lastMarkAndCourseMapper = new LastMarkAndCourseMapper();
+//            lastMarkAndCourseMapper.setMark(entity.getMark());
+//            lastMarkAndCourseMapper.setCourseName(entity.getCourse().getName());
+//            markList.add(lastMarkAndCourseMapper);
+//        });
+//        return markList;
+        return studentCourseMarkRepository.findTop1MarkAndCourseByStudentOrderByCreatedDateAsc2(studentId);
+    }
+
+    public List<LastMarkAndCourseMapper> getTop3MarkAndCourseByStudentId(Integer studentId) {
+//        StudentEntity studentEntity = new StudentEntity();
+//        studentEntity.setId(studentId);
+//
+//        List<StudentCourseMarkEntity> entityList = studentCourseMarkRepository.findTop3MarkByStudentOrderByMarkDesc(studentEntity);
+//        List<LastMarkAndCourseMapper> markList = new ArrayList<>();
+//        entityList.forEach(entity -> {
+//            LastMarkAndCourseMapper lastMarkAndCourseMapper = new LastMarkAndCourseMapper();
+//            lastMarkAndCourseMapper.setMark(entity.getMark());
+//            lastMarkAndCourseMapper.setCourseName(entity.getCourse().getName());
+//            markList.add(lastMarkAndCourseMapper);
+//        });
+//        return markList;
+
+        return studentCourseMarkRepository.findTop3MarkByStudentOrderByMarkDesc2(studentId);
+    }
+
+    public StudentCourseMarkDTO getFirstMarkByStudentIdAndGivenCourse(Integer studentId, Integer courseId) {
         StudentEntity studentEntity = new StudentEntity();
         studentEntity.setId(studentId);
 
-        List<StudentCourseMarkEntity> entityList = studentCourseMarkRepository.findTop1MarkAndCourseByStudentOrderByCreatedDateDesc(studentEntity);
-        List<LastMarkAndCourseMapper> markList = new ArrayList<>();
-        entityList.forEach(entity -> {
-            LastMarkAndCourseMapper lastMarkAndCourseMapper = new LastMarkAndCourseMapper();
-            lastMarkAndCourseMapper.setMark(entity.getMark());
-            lastMarkAndCourseMapper.setCourseName(entity.getCourse().getName());
-            markList.add(lastMarkAndCourseMapper);
-        });
-        return markList;
+        CourseEntity courseEntity = new CourseEntity();
+        courseEntity.setId(courseId);
+
+        Optional<StudentCourseMarkEntity> optional = studentCourseMarkRepository.findTopByStudentAndAndCourseOrderByCreatedDate(studentEntity,courseEntity);
+        if (optional.isEmpty()){
+            throw new ItemNotFoundException("Mark not found");
+        }
+        return toDto(optional.get());
+    }
+
+    public LastMarkAndCourseMapper getFirstMarkByStudentIdAndGivenCourse2(Integer studentId, Integer courseId) {
+        return studentCourseMarkRepository.findTopByStudentAndAndCourseOrderByCreatedDate2(studentId, courseId);
+    }
+
+    public Object getTop1MarkByStudentIdAndGivenCourse(Integer studentId, Integer courseId) {
+        StudentEntity studentEntity = new StudentEntity();
+        studentEntity.setId(studentId);
+
+        CourseEntity courseEntity = new CourseEntity();
+        courseEntity.setId(courseId);
+
+        Optional<StudentCourseMarkEntity> optional = studentCourseMarkRepository.findTop1ByStudentAndAndCourseOrderByMarkDesc(studentEntity,courseEntity);
+        if (optional.isEmpty()){
+            throw new ItemNotFoundException("Mark not found");
+        }
+        return toDto(optional.get());
+    }
+
+    public LastMarkAndCourseMapper getTop1MarkByStudentIdAndGivenCourse2(Integer studentId, Integer courseId) {
+        return studentCourseMarkRepository.findTop1ByStudentAndAndCourseOrderByMarkDesc2(studentId, courseId);
+    }
+
+    public LastMarkAndCourseMapper getAvgMarkByStudentId(Integer studentId) {
+        return studentCourseMarkRepository.getAvgMarkByStudentId(studentId);
+    }
+
+
+    public LastMarkAndCourseMapper getAvgMarkByStudentIdAndGivenCourse(Integer studentId, Integer courseId) {
+        return studentCourseMarkRepository.getAvgMarkByStudentIdAndGivenCourse(studentId,courseId);
+    }
+
+    public Long getCountMarkByGivenMarkOlder(Integer stusentId, Double mark) {
+        return studentCourseMarkRepository.getCountMarkByGivenMarkOlder(stusentId, mark);
+    }
+
+    public LastMarkAndCourseMapper getTopMarkByGivenCourse(Integer courseId) {
+        return studentCourseMarkRepository.findTopMarkByCourseOrderByDesc(courseId);
+    }
+
+    public LastMarkAndCourseMapper getAVgMarkByGivenCourse(Integer courseId) {
+        return studentCourseMarkRepository.getAVgMarkByGivenCourse(courseId);
+    }
+
+    public Long getCountMarkByGivenCourse(Integer courseId) {
+        return studentCourseMarkRepository.getCountMarkByGivenCourse(courseId);
+    }
+
+    public Page<SCMMapper> getPaginationByStudentId(Integer studentId, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<SCMMapper> dtoList = studentCourseMarkRepository.getPaginationByStudentId(studentId, pageable);
+        if (dtoList == null){
+            throw new ItemNotFoundException("StudentCourseMark not found");
+        }
+        return dtoList;
+    }
+
+    public Page<SCMMapper> getPagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<SCMMapper> dtoList = studentCourseMarkRepository.getPagination(pageable);
+        if (dtoList == null){
+            throw new ItemNotFoundException("StudentCourseMark not found");
+        }
+        return dtoList;
+    }
+
+    public Page<SCMMapper> getPaginationByCourseId(Integer courseId, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<SCMMapper> dtoList = studentCourseMarkRepository.getPaginationByCourseId(courseId, pageable);
+        if (dtoList == null){
+            throw new ItemNotFoundException("StudentCourseMark not found");
+        }
+        return dtoList;
+    }
+
+    public List<SCMMapper> getByStudentIdWithDetail(Integer id) {
+        return studentCourseMarkRepository.getByStudentId(id);
+    }
+
+    public List<SCMMapper> getByCourseIdWithDetail(Integer id) {
+        return studentCourseMarkRepository.getByCourseId(id);
     }
 }
 

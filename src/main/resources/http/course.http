@@ -1,4 +1,4 @@
-### CREATE COURSE
+### 1. CREATE COURSE
 POST localhost:8080/course/create
 Content-Type: application/json
 
@@ -8,7 +8,7 @@ Content-Type: application/json
   "duration": 7
 }
 
-### CREATE COURSE ALL
+### 1. CREATE COURSE ALL
 POST localhost:8080/course/create/all
 Content-Type: application/json
 
@@ -100,53 +100,50 @@ Content-Type: application/json
   }
 ]
 
-### GET ALL COURSE
-GET localhost:8080/course/all
-
-### GET BY id
+### 2. GET BY id
 GET localhost:8080/course/2
 
-### GET BY name
-GET localhost:8080/course/name?name=Java
+### 3. GET ALL COURSE
+GET localhost:8080/course/all
 
-### GET BY price
-GET localhost:8080/course/price?price=1500000
-
-### GET BY duration
-GET localhost:8080/course/duration?duration=5
-
-### GET BY created_date
-GET localhost:8080/course/created_date?created_date=2023-07-05
-
-### GET BY beetwen date
-GET localhost:8080/course/date-range?startDate=2023-07-01&endDate=2023-07-31
-
-### GET student pagenation
-GET localhost:8080/course/pagination?page=0&size=3
-
-### GET student pagenation by created_date
-GET localhost:8080/course/pagination/sortByCreated_date?page=0&size=3
-
-### GET student pagenation by price
-GET localhost:8080/course/pagination/by_price?page=0&size=3&price=80
-
-### GET student pagenation by price between
-GET localhost:8080/course/pagination/by_price_between?page=0&size=5&from=90&to=100
-
-
-
-
-
-### DELETE ALL
-DELETE localhost:8080/student/delete/all
-
-### DELETE BY id
-DELETE localhost:8080/course/3
-
-### UPDATE by id
+### 4. UPDATE by id
 PUT localhost:8080/course/1
 Content-Type: application/json
 
 {
-  "name": "PHP"
+  "price": 80.0
 }
+
+### 5. DELETE BY id
+DELETE localhost:8080/course/3
+
+### 6. GET BY name
+GET localhost:8080/course/name?name=Java
+
+### 6. GET BY price
+GET localhost:8080/course/price?price=1500000
+
+### 6. GET BY duration
+GET localhost:8080/course/duration?duration=5
+
+### 7. GET BY beetwen date
+GET localhost:8080/course/get_price_between?from=70&to=100
+
+### 8. GET BY beetwen date
+GET localhost:8080/course/get_between_date?startDate=2023-07-01&endDate=2023-07-31
+
+### 8. GET BY created_date
+GET localhost:8080/course/created_date?created_date=2023-07-05
+
+### 9. GET student pagenation
+GET localhost:8080/course/pagination?page=0&size=3
+
+### 10. GET student pagenation by created_date
+GET localhost:8080/course/pagination/sort_by_created_date?page=0&size=3
+
+### 11. GET student pagenation by price
+GET localhost:8080/course/pagination/by_price?page=0&size=3&price=80
+
+### 12. GET student pagenation by price between
+GET localhost:8080/course/pagination/by_price_between?page=0&size=5&from=90&to=100
+

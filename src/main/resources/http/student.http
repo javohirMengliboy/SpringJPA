@@ -1,4 +1,4 @@
-### CREATE STUDENT
+### 1. CREATE STUDENT
 POST localhost:8080/student/create
 Content-Type: application/json
 
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 
-### CREATE STUDENT ALL
+### 1. CREATE STUDENT ALL
 POST localhost:8080/student/create/all
 Content-Type: application/json
 
@@ -92,59 +92,57 @@ Content-Type: application/json
 ]
 
 
-### GET ALL STUDENT
+### 2. GET ALL STUDENT
 GET localhost:8080/student/all
 
-### GET BY id
+### 3. GET BY id
 GET localhost:8080/student/
 
-### GET BY phone
-GET localhost:8080/student/phone?phone=123456
-
-### GET BY name
-GET localhost:8080/student/name?name=Vali
-
-### GET BY surname
-GET localhost:8080/student/surname?surname=Aliyev
-
-### GET BY age
-GET localhost:8080/student/age?age=
-
-### GET BY level
-GET localhost:8080/student/level?level=
-
-### GET BY gender
-GET localhost:8080/student/gender?gender=
-
-### GET BY created_date
-GET localhost:8080/student/created_date?created_date=2023-07-05
-
-### GET BY beetwen date
-GET localhost:8080/student/date-range?startDate=2023-07-01&endDate=2023-07-31
-
-### GET student pagenation
-GET localhost:8080/student/pagination?page=0&size=3
-
-### GET student pagenation by level
-GET localhost:8080/student/pagination/by-level?page=0&size=3&level=2
-
-### GET student pagenation by gender
-GET localhost:8080/student/pagination/by-gender?page=0&size=3&gender=FEMALE
-
-
-
-
-### DELETE ALL
-DELETE localhost:8080/student/delete/all
-
-### DELETE BY id
-DELETE localhost:8080/student/4
-
-### UPDATE id
+### 4. UPDATE id
 PUT localhost:8080/student/10
 Content-Type: application/json
 
 {
-  "name": "Hasan",
-  "surname": "Hasanov"
+    "name": "Hasan",
+    "surname": "Hasanov"
 }
+
+### 5. DELETE BY id
+DELETE localhost:8080/student/4
+
+### 6. GET BY phone
+GET localhost:8080/student/phone?phone=123456
+
+### 6. GET BY name
+GET localhost:8080/student/name?name=Vali
+
+### 6. GET BY surname
+GET localhost:8080/student/surname?surname=Aliyev
+
+### 6. GET BY level
+GET localhost:8080/student/level?level=
+
+### 6. GET BY age
+GET localhost:8080/student/age?age=
+
+### 6. GET BY gender
+GET localhost:8080/student/gender?gender=
+
+### 7. GET BY created_date
+GET localhost:8080/student/given_date?given_date=2023-07-05
+
+### 8. GET BY beetwen date
+GET localhost:8080/student/between_date?startDate=2023-07-01&endDate=2023-07-31
+
+### 9. GET student pagenation
+GET localhost:8080/student/pagination?page=0&size=3
+
+### 10. GET student pagenation by level
+GET localhost:8080/student/pagination/by_level?page=0&size=3&level=2
+
+### 11. GET student pagenation by gender
+GET localhost:8080/student/pagination/by_gender?page=0&size=3&gender=FEMALE
+
+
+
+

@@ -31,11 +31,11 @@ Content-Type: application/json
 ]
 
 ### 2. UPDATE by id
-PUT localhost:8080/student_course_mark/1
+PUT localhost:8080/student_course_mark/7
 Content-Type: application/json
 
 {
-  "mark": 5
+  "mark": 4
 }
 
 ### 2. UPDATE2 by id
@@ -55,7 +55,7 @@ GET localhost:8080/student_course_mark/by_course_id_with_detail/5
 
 
 ### 5. DELETE BY id
-DELETE localhost:8080/student_course_mark/2
+DELETE localhost:8080/student_course_mark/5
 
 ### 6. GET ALL StudentCourseMark
 GET localhost:8080/student_course_mark/all
@@ -70,7 +70,7 @@ GET localhost:8080/student_course_mark/get_mark_by_between_date?studentId=3&from
 GET localhost:8080/student_course_mark/get_all_mark_by_student_id?studentId=3
 
 ### 10. GET StudentCourseMark get all mark by student id and by course id
-GET localhost:8080/student_course_mark/get_all_mark_by_student_id_and_by_course_id?studentId=3&courseId=5
+GET localhost:8080/student_course_mark/get_all_mark_student_by_given_course?studentId=3&courseId=5
 
 ### 11. GET StudentCourseMark get last mark and course by student id
 GET localhost:8080/student_course_mark/get_last_mark_and_course_by_student_id?studentId=3

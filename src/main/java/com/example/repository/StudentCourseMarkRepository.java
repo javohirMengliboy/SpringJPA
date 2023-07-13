@@ -1,12 +1,12 @@
 package com.example.repository;
-import com.example.dto.StudentCourseMarkDTO;
 import com.example.entity.CourseEntity;
 import com.example.entity.StudentCourseMarkEntity;
 import com.example.entity.StudentEntity;
-import com.example.mapper.LastMarkAndCourseMapper;
+import com.example.mapper.StudentMarkCourseNameMapper;
 import com.example.mapper.SCMMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -19,37 +19,38 @@ import java.util.Optional;
 public interface StudentCourseMarkRepository extends CrudRepository<StudentCourseMarkEntity, Integer> {
 
 
-    /** 2 */
+    /** 2. Update */
     @Transactional
-    @Query("update from StudentCourseMarkEntity set mark = :mark where id = :id")
-    int updateMarkById(@Param("mark") Double mark, @Param("id") Integer id);
-    /** 3 */
+    @Modifying
+    @Query("update StudentCourseMarkEntity set mark = :mark where id = :id")
+    int update2(@Param("id") Integer id, @Param("mark") Double mark);
+
+    /** 3. Get ById */
     @Query("select new com.example.mapper.SCMMapper(id,student.name,course.name, mark, createdDate)from StudentCourseMarkEntity " +
             "where id = :id")
-    List<SCMMapper> getById(@Param("id") Integer id);
+    SCMMapper getById(@Param("id") Integer id);
 
 
-    /** 4 */
-
-    @Query("select new com.example.mapper.SCMMapper(id,student.name,course.name, mark, createdDate)from StudentCourseMarkEntity " +
-            "where student.id = :id")
-    List<SCMMapper> getByStudentId(@Param("id") Integer id);
+    /** 4. Get ById With Detail */
+    @Query("from StudentCourseMarkEntity where id = :id")
+    Optional<StudentCourseMarkEntity> findById2(@Param("id") Integer id);
 
     @Query("select new com.example.mapper.SCMMapper(id,student.name,course.name, mark, createdDate)from StudentCourseMarkEntity " +
             "where course.id = :id")
     List<SCMMapper> getByCourseId(@Param("id") Integer id);
 
 
-    /** 5 */
+    /** 5. Delete ById */
     @Transactional
+    @Modifying
     @Query("delete from StudentCourseMarkEntity where id = :id")
     int deleteQuery(@Param("id") Integer id);
 
-    /** 6 */
+    /** 6. Get All */
     @Query("select new com.example.mapper.SCMMapper(id,student.name,course.name, mark, createdDate)from StudentCourseMarkEntity ")
     List<SCMMapper> getAll();
 
-    /** 7,8 */
+    /** 7. Get By Given Date 8. Get By Between Date */
     List<StudentCourseMarkEntity> findByCreatedDateBetweenAndStudent(LocalDateTime from, LocalDateTime to, StudentEntity student);
 
     @Query("from StudentCourseMarkEntity where createdDate > :from and createdDate < :to and student = :student")
@@ -57,108 +58,112 @@ public interface StudentCourseMarkRepository extends CrudRepository<StudentCours
                                                                       @Param("to") LocalDateTime to,
                                                                       @Param("student") StudentEntity student);
 
-    /** 9 */
+    /** 9. Get All Mark By Student */
     List<StudentCourseMarkEntity> findMarkByStudentOrderByCreatedDateDesc(StudentEntity student);
 
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :id order by scm.createdDate desc")
-    List<LastMarkAndCourseMapper> findMarkByStudentOrderByCreatedDateDesc2(@Param("id") Integer id);
+    List<StudentMarkCourseNameMapper> findMarkByStudentOrderByCreatedDateDesc2(@Param("id") Integer id);
 
 
-    /** 10 */
+    /** 10. Get All Mark Student By Given Course */
     List<StudentCourseMarkEntity> findMarkByStudentAndCourseOrderByCreatedDateDesc(StudentEntity studentEntity, CourseEntity courseEntity);
 
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :sid and c.id = :cid order by scm.createdDate desc")
-    List<LastMarkAndCourseMapper> findMarkByStudentAndCourseOrderByCreatedDateDesc2(@Param("sid") Integer sid,
-                                                                                    @Param("cid") Integer cid);
+    List<StudentMarkCourseNameMapper> findMarkByStudentAndCourseOrderByCreatedDateDesc2(@Param("sid") Integer sid,
+                                                                                        @Param("cid") Integer cid);
 
-    /** 11 */
-    List<StudentCourseMarkEntity> findTop1MarkAndCourseByStudentOrderByCreatedDateDesc(StudentEntity studentEntity);
+    /** 11. Get Last Mark Student */
+    StudentCourseMarkEntity findTop1MarkAndCourseByStudentOrderByCreatedDateDesc(StudentEntity studentEntity);
 
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :id order by scm.createdDate desc limit 1")
-    List<LastMarkAndCourseMapper> findTop1MarkAndCourseByStudentOrderByCreatedDateDesc2(Integer id);
+    StudentMarkCourseNameMapper findTop1MarkAndCourseByStudentOrderByCreatedDateDesc2(Integer id);
 
-    /** 12 */
+    /** 12. Get Top 3 Mark Student */
     List<StudentCourseMarkEntity> findTop3MarkByStudentOrderByMarkDesc(StudentEntity studentEntity);
 
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :id order by scm.mark desc limit 3")
-    List<LastMarkAndCourseMapper> findTop3MarkByStudentOrderByMarkDesc2(@Param("id") Integer id);
+    List<StudentMarkCourseNameMapper> findTop3MarkByStudentOrderByMarkDesc2(@Param("id") Integer id);
 
-    /** 13 */
-    List<StudentCourseMarkEntity> findTop1MarkAndCourseByStudentOrderByCreatedDateAsc(StudentEntity studentEntity);
+    /** 13. Get First Mark Student */
+    StudentCourseMarkEntity findTop1MarkAndCourseByStudentOrderByCreatedDateAsc(StudentEntity studentEntity);
 
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :id order by scm.createdDate asc limit 1")
-    LastMarkAndCourseMapper findTop1MarkAndCourseByStudentOrderByCreatedDateAsc2(@Param("id") Integer studentId);
+    StudentMarkCourseNameMapper findTop1MarkAndCourseByStudentOrderByCreatedDateAsc2(@Param("id") Integer studentId);
 
-    /** 14 */
+    /** 14. Get First Mark Student By Given Course */
     Optional<StudentCourseMarkEntity> findTopByStudentAndAndCourseOrderByCreatedDate(StudentEntity studentEntity,CourseEntity courseEntity);
 
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :sid and c.id = :cid order by scm.createdDate asc limit 1")
-    LastMarkAndCourseMapper findTopByStudentAndAndCourseOrderByCreatedDate2(@Param("sid") Integer sid, @Param("cid") Integer cid);
+    StudentMarkCourseNameMapper findTopByStudentAndAndCourseOrderByCreatedDate2(@Param("sid") Integer sid, @Param("cid") Integer cid);
 
-    /** 15 */
+    /** 15. Get Top 1 Mark Student By Give Course */
     Optional<StudentCourseMarkEntity> findTop1ByStudentAndAndCourseOrderByMarkDesc(StudentEntity studentEntity, CourseEntity courseEntity);
 
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, scm.mark, c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :sid and c.id = :cid order by scm.mark desc limit 1")
-    LastMarkAndCourseMapper findTop1ByStudentAndAndCourseOrderByMarkDesc2(@Param("sid") Integer sid, @Param("cid") Integer cid);
+    StudentMarkCourseNameMapper findTop1ByStudentAndAndCourseOrderByMarkDesc2(@Param("sid") Integer sid, @Param("cid") Integer cid);
 
-    /** 16 */
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, avg(scm.mark)) from StudentCourseMarkEntity as scm " +
+    /** 16. Get Avg Mark Student */
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, avg(scm.mark)) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s " +
             "where s.id = :sid group by s.name")
-    LastMarkAndCourseMapper getAvgMarkByStudentId(@Param("sid") Integer studentId);
+    StudentMarkCourseNameMapper getAvgMarkByStudentId(@Param("sid") Integer studentId);
 
-    /** 17 */
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(s.name, avg(scm.mark)) from StudentCourseMarkEntity as scm " +
+    /** 17. Get Avg Mark Student By Given Course */
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(s.name, avg(scm.mark)) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :sid and c.id = :cid " +
             "group by s.name")
-    LastMarkAndCourseMapper getAvgMarkByStudentIdAndGivenCourse(@Param("sid") Integer studentId, @Param("cid") Integer courseId);
+    StudentMarkCourseNameMapper getAvgMarkByStudentIdAndGivenCourse(@Param("sid") Integer studentId, @Param("cid") Integer courseId);
 
-    /** 18 */
+    /** 18. Get Student's Count Of Marks Greater Than The Given Mark .*/
     @Query("select count(*) from StudentCourseMarkEntity as scm " +
             "inner join scm.student as s inner join scm.course as c where s.id = :sid and scm.mark > :mark " +
             "group by s.name")
     Long getCountMarkByGivenMarkOlder(@Param("sid") Integer sid, @Param("mark") Double mark);
 
 
-    /** 19 */
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(scm.mark, c.name) from StudentCourseMarkEntity as scm " +
+    /** 19. Get Top 1 Mark By Given Course */
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(scm.mark, c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.course as c " +
             "where c.id = :cid order by scm.mark desc limit 1")
-    LastMarkAndCourseMapper findTopMarkByCourseOrderByDesc(@Param("cid") Integer courseId);
+    StudentMarkCourseNameMapper findTopMarkByCourseOrderByDesc(@Param("cid") Integer courseId);
 
-    /** 20 */
-    @Query("select new com.example.mapper.LastMarkAndCourseMapper(avg(scm.mark), c.name) from StudentCourseMarkEntity as scm " +
+    /** 20. Get Avg Mark By Given Course */
+    @Query("select new com.example.mapper.StudentMarkCourseNameMapper(avg(scm.mark), c.name) from StudentCourseMarkEntity as scm " +
             "inner join scm.course as c " +
             "where c.id = :cid group by c.name")
-    LastMarkAndCourseMapper getAVgMarkByGivenCourse(@Param("cid") Integer courseId);
+    StudentMarkCourseNameMapper getAVgMarkByGivenCourse(@Param("cid") Integer courseId);
 
 
-    /** 21 */
+    /** 21. Get Count Mark By Given Course */
     @Query("select count(*) from StudentCourseMarkEntity as scm " +
             "inner join scm.course as c where c.id = :cid " +
             "group by c.name")
     Long getCountMarkByGivenCourse(@Param("cid") Integer courseId);
 
-    /** 22 */
+    /** 22. Get Pagination */
+    Page<StudentCourseMarkEntity> getAllBy(Pageable pageable);
     @Query("select new com.example.mapper.SCMMapper(id, student.name, course.name, mark, createdDate) from StudentCourseMarkEntity ")
-    Page<SCMMapper> getPagination(Pageable pageable);
+    Page<SCMMapper> getAllBy2(Pageable pageable);
 
-    /** 23 */
-    @Query("select new com.example.mapper.SCMMapper(id, student.name, course.name, mark, createdDate) from StudentCourseMarkEntity " +
+    /** 23. Get Pagination By StudentId */
+    Page<StudentCourseMarkEntity> getAllByStudent(StudentEntity studentEntity,Pageable pageable);
+
+    @Query("select new com.example.mapper.SCMMapper(id, student.name, course.name, mark, createdDate) from StudentCourseMarkEntity" +
             " where student.id = :sid")
-    Page<SCMMapper> getPaginationByStudentId(@Param("sid") Integer studentId, Pageable pageable);
+    Page<SCMMapper> getAllByStudent2(@Param("sid") Integer studentId, Pageable pageable);
 
-    /** 24 */
+    /** 24. Get Pagination By CourseId */
+    Page<StudentCourseMarkEntity> getAllByCourse(CourseEntity courseEntity, Pageable pageable);
+
     @Query("select new com.example.mapper.SCMMapper(id, student.name, course.name, mark, createdDate) from StudentCourseMarkEntity " +
             " where course.id = :cid")
-    Page<SCMMapper> getPaginationByCourseId(@Param("cid") Integer courseId, Pageable pageable);
-
+    Page<SCMMapper> getAllByCourse2(@Param("cid") Integer courseId, Pageable pageable);
 
 }

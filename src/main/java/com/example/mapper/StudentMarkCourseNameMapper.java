@@ -7,27 +7,27 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class LastMarkAndCourseMapper {
+public class StudentMarkCourseNameMapper {
     private String studentName;
     private Double mark;
     private String courseName;
 
-    public LastMarkAndCourseMapper(String studentName, Double mark, String courseName) {
+    public StudentMarkCourseNameMapper(String studentName, Double mark, String courseName) {
         this.studentName = studentName;
         this.mark = mark;
         this.courseName = courseName;
     }
 
-    public LastMarkAndCourseMapper(String studentName, Double mark) {
+    public StudentMarkCourseNameMapper(String studentName, Double mark) {
         this.studentName = studentName;
         this.mark = mark;
     }
 
-    public LastMarkAndCourseMapper(Double mark, String courseName) {
+    public StudentMarkCourseNameMapper(Double mark, String courseName) {
         this.mark = mark;
         this.courseName = courseName;
     }
 
-    public LastMarkAndCourseMapper() {
+    public StudentMarkCourseNameMapper() {
     }
 }

@@ -51,7 +51,7 @@ GET localhost:8080/student_course_mark/by_id_with_detail/3
 GET localhost:8080/student_course_mark/by_student_id_with_detail/3
 
 ### 4. GET StudentCourseMark by course id with detail
-GET localhost:8080/student_course_mark/by_course_id_with_detail/5
+GET localhost:8080/student_course_mark/by_course_id_with_detail/3
 
 
 ### 5. DELETE BY id
@@ -114,7 +114,14 @@ GET localhost:8080/student_course_mark/get_pagination_by_given_student_id?studen
 ### 24. GET StudentCourseMark pagination by given course Id
 GET localhost:8080/student_course_mark/get_pagination_by_given_course_id?courseId=5&page=0&size=2
 
+### 25. Filter
+POST localhost:8080/student_course_mark/filter
+Content-Type: application/json
 
+{
+  "student": 3,
+  "mark": 4
+}
 
 
 

@@ -143,6 +143,13 @@ GET localhost:8080/student/pagination/by_level?page=0&size=3&level=2
 ### 11. GET student pagenation by gender
 GET localhost:8080/student/pagination/by_gender?page=0&size=3&gender=FEMALE
 
+### 12. Filter
+POST localhost:8080/student/filter
+Content-Type: application/json
 
+{
+  "name": "Vali",
+  "createdDate": "2023-07-06"
+}
 
 

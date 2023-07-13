@@ -1,11 +1,15 @@
 package com.example.service;
 
+import com.example.dto.CourseDTO;
 import com.example.dto.StudentDTO;
+import com.example.dto.filter.CourseFilterDTO;
+import com.example.dto.filter.StudentFilterDTO;
 import com.example.entity.StudentEntity;
 import com.example.enums.Gender;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.repository.StudentRepository;
+import com.example.repository.custom.StudentCustomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +26,8 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private StudentCustomRepository studentCustomRepository;
 
     /** 1. Create Student */
     public StudentDTO create(StudentDTO dto){
@@ -332,6 +338,15 @@ public class StudentService {
         return dtoList;
     }
 
+    /** 12. Filter */
+    public List<StudentDTO> filter(StudentFilterDTO filterDTO, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page,size);
+        List<StudentDTO> dtoPage = studentCustomRepository.filter(filterDTO, pageable);
+        if (dtoPage.isEmpty()){
+            throw new ItemNotFoundException("Course not found");
+        }
+        return dtoPage;
+    }
 
 
     private StudentDTO toDto(StudentEntity studentEntity) {
@@ -355,5 +370,6 @@ public class StudentService {
             throw  new AppBadRequestException("Where Surname?");
         }
     }
+
 
 }

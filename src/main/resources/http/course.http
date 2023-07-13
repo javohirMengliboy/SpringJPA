@@ -147,3 +147,12 @@ GET localhost:8080/course/pagination/by_price?page=0&size=3&price=80
 ### 12. GET student pagenation by price between
 GET localhost:8080/course/pagination/by_price_between?page=0&size=5&from=90&to=100
 
+### 13. Filter
+POST localhost:8080/course/filter
+Content-Type: application/json
+
+{
+  "price": 80,
+  "duration": 9
+}
+

@@ -1,10 +1,12 @@
 package com.example.service;
 
 import com.example.dto.CourseDTO;
+import com.example.dto.filter.CourseFilterDTO;
 import com.example.entity.CourseEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.repository.CourseRepository;
+import com.example.repository.custom.CourseCustomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,10 @@ import java.util.Optional;
 public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private CourseCustomRepository courseCustomRepository;
+
     /** 1. Create Course */
     public CourseDTO create(CourseDTO course) {
         check(course);
@@ -262,6 +268,16 @@ public class CourseService {
             throw new ItemNotFoundException("Course not found");
         }
         return dtoList;
+    }
+
+    /** 13. Filter */
+    public List<CourseDTO> filter(CourseFilterDTO filterDTO, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page,size);
+        List<CourseDTO> dtoPage = courseCustomRepository.filter(filterDTO, pageable);
+        if (dtoPage.isEmpty()){
+            throw new ItemNotFoundException("Course not found");
+        }
+        return dtoPage;
     }
 
     private CourseDTO toDto(CourseEntity courseEntity) {

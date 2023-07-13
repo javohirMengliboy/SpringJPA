@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import com.example.dto.StudentDTO;
+import com.example.dto.filter.CourseFilterDTO;
+import com.example.dto.filter.StudentFilterDTO;
 import com.example.entity.StudentEntity;
 import com.example.enums.Gender;
 import com.example.exp.ItemNotFoundException;
@@ -161,6 +163,13 @@ public class StudentController {
         return ResponseEntity.ok(studentList);
     }
 
+    /** 13. Filter */
+    @PostMapping("/filter")
+    public ResponseEntity<?> filter(@RequestBody StudentFilterDTO filterDTO,
+                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "size", defaultValue = "10") int size){
+        return ResponseEntity.ok(studentService.filter(filterDTO, page, size));
+    }
 
 
 

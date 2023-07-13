@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.CourseDTO;
+import com.example.dto.filter.CourseFilterDTO;
 import com.example.entity.CourseEntity;
 import com.example.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,5 +134,13 @@ public class CourseController {
                                                                              @RequestParam double to) {
         List<CourseDTO> studentList = courseService.getCoursePaginationByPriceBetween(page, size, from,to);
         return ResponseEntity.ok(studentList);
+    }
+
+    /** 13. Filter */
+    @PostMapping("/filter")
+    public ResponseEntity<?> filter(@RequestBody CourseFilterDTO filterDTO,
+                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "size", defaultValue = "10") int size){
+        return ResponseEntity.ok(courseService.filter(filterDTO, page, size));
     }
 }

@@ -1,12 +1,15 @@
 package com.example.service;
 
 import com.example.dto.StudentCourseMarkDTO;
+import com.example.dto.StudentDTO;
+import com.example.dto.filter.StudentCourseMarkFilterDTO;
 import com.example.entity.CourseEntity;
 import com.example.entity.StudentCourseMarkEntity;
 import com.example.entity.StudentEntity;
 import com.example.exp.ItemNotFoundException;
 import com.example.mapper.*;
 import com.example.repository.StudentCourseMarkRepository;
+import com.example.repository.custom.StudentCourseMarkCustomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +28,8 @@ import java.util.Optional;
 public class StudentCourseMarkService {
     @Autowired
     private StudentCourseMarkRepository studentCourseMarkRepository;
+    @Autowired
+    private StudentCourseMarkCustomRepository studentCourseMarkCustomRepository;
 
     /** 1. Create */
     public StudentCourseMarkDTO create(StudentCourseMarkDTO course) {
@@ -123,6 +128,14 @@ public class StudentCourseMarkService {
         markMapper.setMark(entity.getMark());
         markMapper.setCreatedDate(entity.getCreatedDate());
         return markMapper;
+    }
+
+    public List<StudentCourseMarkDTO> findByStudentId(Integer id){
+        List<StudentCourseMarkDTO> dtoList = studentCourseMarkRepository.findByStudentId(id);
+        if (dtoList.isEmpty()){
+            throw new ItemNotFoundException("StudentCourseMark not found");
+        }
+        return dtoList;
     }
 
     /** 5. Delete ById */
@@ -458,6 +471,17 @@ public class StudentCourseMarkService {
         }
         return dtoList;
     }
+
+    /** 25. Filter */
+    public List<StudentCourseMarkDTO> filter(StudentCourseMarkFilterDTO filterDTO, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        List<StudentCourseMarkDTO> dtoPage = studentCourseMarkCustomRepository.filter(filterDTO, pageable);
+        if (dtoPage.isEmpty()){
+            throw new ItemNotFoundException("Course not found");
+        }
+        return dtoPage;
+    }
+
 
     private StudentCourseMarkDTO toDto(StudentCourseMarkEntity entity) {
         StudentCourseMarkDTO dto = new StudentCourseMarkDTO();

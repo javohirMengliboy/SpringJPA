@@ -1,4 +1,5 @@
 package com.example.repository;
+import com.example.dto.StudentCourseMarkDTO;
 import com.example.entity.CourseEntity;
 import com.example.entity.StudentCourseMarkEntity;
 import com.example.entity.StudentEntity;
@@ -38,6 +39,10 @@ public interface StudentCourseMarkRepository extends CrudRepository<StudentCours
     @Query("select new com.example.mapper.SCMMapper(id,student.name,course.name, mark, createdDate)from StudentCourseMarkEntity " +
             "where course.id = :id")
     List<SCMMapper> getByCourseId(@Param("id") Integer id);
+
+
+    @Query("select new com.example.dto.StudentCourseMarkDTO(id, student.id, course.id, mark, createdDate) from StudentCourseMarkEntity where student.id = :id")
+    List<StudentCourseMarkDTO> findByStudentId(@Param("id") Integer id);
 
 
     /** 5. Delete ById */

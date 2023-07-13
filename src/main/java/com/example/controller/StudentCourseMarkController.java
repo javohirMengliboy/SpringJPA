@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import com.example.dto.StudentCourseMarkDTO;
+import com.example.dto.filter.StudentCourseMarkFilterDTO;
+import com.example.dto.filter.StudentFilterDTO;
 import com.example.service.StudentCourseMarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,6 +50,11 @@ public class StudentCourseMarkController {
     @GetMapping(value = "/by_id_with_detail/{id}")
     public ResponseEntity<?> getByIdWithDetail(@PathVariable("id") Integer id){
         return ResponseEntity.ok(studentCourseMarkService.getByIdWithDetail(id));
+    }
+
+    @GetMapping(value = "/by_student_id_with_detail/{id}")
+    public ResponseEntity<?> getByStudentIdWithDetail(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(studentCourseMarkService.findByStudentId(id));
     }
 
     /** 5. Delete ById */
@@ -190,6 +197,14 @@ public class StudentCourseMarkController {
                                                       @RequestParam("page") int page,
                                                       @RequestParam("size") int size){
         return ResponseEntity.ok(studentCourseMarkService.getPaginationByCourseId(course_id,page,size));
+    }
+
+    /** 13. Filter */
+    @PostMapping("/filter")
+    public ResponseEntity<?> filter(@RequestBody StudentCourseMarkFilterDTO filterDTO,
+                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                    @RequestParam(value = "size", defaultValue = "10") int size){
+        return ResponseEntity.ok(studentCourseMarkService.filter(filterDTO, page, size));
     }
 
 
